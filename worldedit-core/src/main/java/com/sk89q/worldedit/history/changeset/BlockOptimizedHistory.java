@@ -24,9 +24,9 @@ import static java.util.Map.Entry;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
-import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.history.change.BlockChange;
 import com.sk89q.worldedit.history.change.Change;
+import com.sk89q.worldedit.math.BlockVector3d;
 import com.sk89q.worldedit.util.collection.TupleArrayList;
 import com.sk89q.worldedit.world.block.BlockStateHolder;
 
@@ -43,8 +43,8 @@ import java.util.Iterator;
  */
 public class BlockOptimizedHistory extends ArrayListHistory {
 
-    private final TupleArrayList<BlockVector, BlockStateHolder> previous = new TupleArrayList<>();
-    private final TupleArrayList<BlockVector, BlockStateHolder> current = new TupleArrayList<>();
+    private final TupleArrayList<BlockVector3d, BlockStateHolder> previous = new TupleArrayList<>();
+    private final TupleArrayList<BlockVector3d, BlockStateHolder> current = new TupleArrayList<>();
 
     @Override
     public void add(Change change) {
@@ -52,7 +52,7 @@ public class BlockOptimizedHistory extends ArrayListHistory {
 
         if (change instanceof BlockChange) {
             BlockChange blockChange = (BlockChange) change;
-            BlockVector position = blockChange.getPosition();
+            BlockVector3d position = blockChange.getPosition();
             previous.put(position, blockChange.getPrevious());
             current.put(position, blockChange.getCurrent());
         } else {
@@ -85,7 +85,7 @@ public class BlockOptimizedHistory extends ArrayListHistory {
      *
      * @return a function
      */
-    private Function<Entry<BlockVector, BlockStateHolder>, Change> createTransform() {
+    private Function<Entry<BlockVector3d, BlockStateHolder>, Change> createTransform() {
         return entry -> new BlockChange(entry.getKey(), entry.getValue(), entry.getValue());
     }
 
